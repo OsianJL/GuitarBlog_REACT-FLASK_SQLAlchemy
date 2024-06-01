@@ -4,22 +4,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 
 		store: {
-			people: [],
-			planets: [],
-			starships: [],
+			electric: [],
+			acoustic: [],
+			classical: [],
 
-			peopleFeatures: {},
-		    planetsFeatures: {},
-			starshipsFeatures: {},
+			electricData: {},
+			acousticData: {},
+			classicalData: {},
 
 			favourites: [],
+			message: "",
 			// counter: 0,
 			auth: false
 		},
 		
 		actions: {
 
-			addFavouritePlanet :async (id)=>{
+			addFavouriteElectric :async (id)=>{
 				let token = localStorage.getItem("token")
 				try {
 					const response = await fetch(process.env.BACKEND_URL + `/api/favorites/electric/${id}`, 
@@ -35,7 +36,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const data = await response.json()
 					console.log(data.results)
 					if (response.status == 200) {
-						setStore({ favourites: data.results })
+						setStore({ message: "Successfully added as a favorite!" })
+					}
+					else if (response.status == 409) {
+						setStore({ message: "You already have this guitar in favorites" })
 					}
 					
 					return true;
@@ -45,10 +49,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			addFavouriteCharacter :async (id)=>{
+			addFavouriteAcoustic :async (id)=>{
 				let token = localStorage.getItem("token")
 				try {
-					const response = await fetch(`https://vigilant-doodle-9777j7j7q6wwh6qg-3000.app.github.dev/favorites/character/${id}`, 
+					const response = await fetch(process.env.BACKEND_URL + `/api/favorites/acoustic/${id}`, 
 					
 					{
 						method: "POST",
@@ -61,7 +65,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const data = await response.json()
 					console.log(data.results)
 					if (response.status == 200) {
-						setStore({ favourites: data.results })
+						setStore({ message: "Successfully added as a favorite!" })
+					}
+					else if (response.status == 409) {
+						setStore({ message: "You already have this guitar in favorites" })
 					}
 					
 					return true;
@@ -71,10 +78,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 	
-			addFavouriteStarship :async (id)=>{
+			addFavouriteClassical :async (id)=>{
 				let token = localStorage.getItem("token")
 				try {
-					const response = await fetch(`https://vigilant-doodle-9777j7j7q6wwh6qg-3000.app.github.dev/favorites/starship/${id}`, 
+					const response = await fetch(process.env.BACKEND_URL + `/api/favorites/classical/${id}`, 
 					
 					{
 						method: "POST",
@@ -85,9 +92,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					})
 					const data = await response.json()
-					console.log(data.results)
 					if (response.status == 200) {
-						setStore({ favourites: data.results })
+						setStore({ message: "Successfully added as a favorite!" })
+					}
+					else if (response.status == 409) {
+						setStore({ message: "You already have this guitar in favorites" })
 					}
 					
 					return true;
@@ -100,7 +109,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getFavorites: async () => {
 				let token = localStorage.getItem("token")
 				try  {
-					const response = await fetch("https://vigilant-doodle-9777j7j7q6wwh6qg-3000.app.github.dev/user/favorites", 
+					const response = await fetch(process.env.BACKEND_URL + '/api/user/favorites', 
 					{
 						method: "GET",
 						headers: {
@@ -128,7 +137,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			deleteFavourite: async (id) => {
 				let token = localStorage.getItem("token")
 				try {
-					const response = await fetch(`https://vigilant-doodle-9777j7j7q6wwh6qg-3000.app.github.dev/favorites/${id}`, 
+					const response = await fetch(process.env.BACKEND_URL + `/api/favorites/${id}`, 
 					{
 						method: "DELETE",
 						headers: {
@@ -139,7 +148,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					const data = await response.json()
 					console.log(data)
-					if (response.status == 200) return true;
+					if (response.status == 200) {
+						window.location.reload();
+						return true
+					}
 
 				} catch (error) {
 					return false; 
@@ -147,61 +159,61 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 
-			getPeople: () => {
-					fetch(process.env.BACKEND_URL + '/api/electric-guitars')
+			getAcoustic: () => {
+					fetch(process.env.BACKEND_URL + '/api/acoustic-guitars')
 						.then(res => res.json())
-						.then(data => setStore({ people: data.results }))
+						.then(data => setStore({ acoustic: data.results }))
 						.catch(err => console.error(err))
 			},
 
-			 getPeopleFeatures: (id) => {
+			 getAcousticData: (id) => {
 			 	
-			 	fetch(process.env.BACKEND_URL + `/api/electric/${id}`)
+			 	fetch(process.env.BACKEND_URL + `/api/acoustic/${id}`)
 			.then(res => res.json())
-			.then(data => setStore({ peopleFeatures: data.results }))
+			.then(data => setStore({ acousticData: data.results }))
 			// .then(data => console.log(data))
 			.catch(err => console.error(err))}, 
 
 
 
 
-			getPlanets: () => {
+			getElectric: () => {
 
-				fetch(process.env.BACKEND_URL + '/api/acoustic-guitars')
+				fetch(process.env.BACKEND_URL + '/api/electric-guitars')
 					.then(res => res.json())
-					.then(data => setStore({ planets: data.results }))
+					.then(data => setStore({ electric: data.results }))
 					.catch(err => console.error(err))
 
 			},
 
-			getPlanetsFeatures: (id) => {
+			getElectricData: (id) => {
 			 	
-				fetch(`https://vigilant-doodle-9777j7j7q6wwh6qg-3000.app.github.dev/planets/${id}`)
+				fetch(process.env.BACKEND_URL + `/api/electric/${id}`)
 		   .then(res => res.json())
-		   .then(data => setStore({ planetsFeatures: data.results }))
+		   .then(data => setStore({ electricData: data.results }))
 		   .catch(err => console.error(err))}, 
 
 
-			getStarships: () => {
+			getClassical: () => {
 
 				fetch(process.env.BACKEND_URL + '/api/classical-guitars')
 					.then(res => res.json())
-					.then(data => setStore({ starships: data.results }))
+					.then(data => setStore({ classical: data.results }))
 					.catch(err => console.error(err))
 
 			},
 
-			getStarshipsFeatures: (id) => {
+			getClassicalData: (id) => {
 			 	
-				fetch(`https://vigilant-doodle-9777j7j7q6wwh6qg-3000.app.github.dev/starships/${id}`)
+				fetch(process.env.BACKEND_URL + `/api/classical/${id}`)
 		   .then(res => res.json())
-		   .then(data => setStore({ starshipsFeatures: data.results }))
+		   .then(data => setStore({ classicalData: data.results }))
 		   .catch(err => console.error(err))}, 
 
 
 			login: async (email, password) => {
 				try  {
-					const response = await fetch("https://vigilant-doodle-9777j7j7q6wwh6qg-3000.app.github.dev/login", 
+					const response = await fetch(process.env.BACKEND_URL +'/api/login', 
 					{
 						method: "POST",
 						headers: {
@@ -216,7 +228,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const data = await response.json()
 					if (response.status == 200) {
 						localStorage.setItem("token", data.access_token)
-						console.log(data)
 						return true;
 					}
 					else {
@@ -233,7 +244,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			
 			signUp: async (firstName, lastName,email, password) => {
 				try  {
-					const response = await fetch("https://vigilant-doodle-9777j7j7q6wwh6qg-3000.app.github.dev/signup", 
+					const response = await fetch(process.env.BACKEND_URL +'/api/signup', 
 					{
 						method: "POST",
 						headers: {
@@ -249,9 +260,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					const data = await response.json()
 					if (response.status == 200) {
-						// localStorage.setItem("token", data.access_token)
+						
 					}
-					console.log(data)
 					return true;
 				}	catch (error) {
 					return false; 
@@ -265,7 +275,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			validToken: async () => {
 				let token = localStorage.getItem("token")
 				try  {
-					const response = await fetch("https://vigilant-doodle-9777j7j7q6wwh6qg-3000.app.github.dev/valid-token", 
+					const response = await fetch(process.env.BACKEND_URL +'/api/valid-token', 
 					{
 						method: "GET",
 						headers: {
@@ -275,11 +285,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					})
 					let data = await response.json()
-					console.log(data)
 					if (response.status == 200) {
 						setStore({auth: data.is_logged})
 					}
-					console.log(data)
+					else {
+						setStore({auth: false})
+					}
 					
 				}	catch (error) {
 					console.log(error); 

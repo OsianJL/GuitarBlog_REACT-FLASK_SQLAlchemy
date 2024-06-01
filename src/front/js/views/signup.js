@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 import { useContext } from "react";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
@@ -27,10 +26,10 @@ export const Signup = () => {
 	return (
 		<div className="container" style={{height: "450px"}}>
 			<div>
-				<h1 className="text-center mt-4 text-primary">Sign Up!</h1>
+				<h1 className="text-center mt-4 text-white">Sign Up!</h1>
 				<form>
                 <div className="form-group">
-						<label>First Name</label>
+						<label></label>
 						<input
 							type="text"
 							className="form-control"
@@ -41,7 +40,7 @@ export const Signup = () => {
 						/>
 					</div>
                     <div className="form-group">
-						<label>Last Name</label>
+						<label></label>
 						<input
 							type="text"
 							className="form-control"
@@ -52,7 +51,7 @@ export const Signup = () => {
 						/>
 					</div>
 					<div className="form-group">
-						<label>Email</label>
+						<label></label>
 						<input
 							type="email"
 							className="form-control"
@@ -63,7 +62,7 @@ export const Signup = () => {
 						/>
 					</div>
 					<div className="form-group">
-						<label>Password</label>
+						<label></label>
 						<input
 							type="password"
 							className="form-control"
